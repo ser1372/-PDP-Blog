@@ -1,12 +1,15 @@
 <?php
 namespace App\Entity;
 
+use Cocur\Slugify\Slugify;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Length;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'posts')]
+#[ORM\HasLifecycleCallbacks]
 class Post
 {
     #[ORM\Id]
@@ -18,17 +21,24 @@ class Post
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    #[ORM\Column(type: Types::STRING, length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 80)]
     #[Assert\NotBlank]
+    #[Length(
+        max: 80,
+        maxMessage: "The name cannot be longer than {{ limit }} characters."
+    )]
     private ?string $name = null;
+
+    #[ORM\Column(length: 255, unique: true)]
+    private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: "datetime")]
     private ?\DateTimeInterface $createdAt = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: "datetime")]
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'posts')]
@@ -67,6 +77,21 @@ class Post
     {
         $this->name = $name;
 
+        $slugify = new Slugify();
+        $this->setSlug($slugify->slugify($name));
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+
         return $this;
     }
 
@@ -87,11 +112,10 @@ class Post
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
     {
-        $this->createdAt = $createdAt;
-
-        return $this;
+        $this->createdAt = new \DateTime();
     }
 
     public function getUpdatedAt(): ?\DateTimeInterface
@@ -99,11 +123,11 @@ class Post
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
     {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
+        $this->updatedAt = new \DateTime();
     }
 
     public function getCategory(): ?Category

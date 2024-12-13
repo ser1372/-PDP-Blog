@@ -70,8 +70,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = RoleEnum::USER->value;
 
         return array_unique($roles);
     }
@@ -81,7 +79,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function setRoles(array $roles): static
     {
-        $this->roles[] = $roles;
+        $this->roles = $roles;
+
+        if (empty($this->roles)) {
+            $this->roles[] = RoleEnum::USER->value;
+        }
 
         return $this;
     }
