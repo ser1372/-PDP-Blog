@@ -2,6 +2,8 @@
 namespace App\Entity;
 
 use Cocur\Slugify\Slugify;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -35,6 +37,9 @@ class Post
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
+    #[ORM\Column(nullable: false)]
+    private ?string $img;
+
     #[ORM\Column(type: "datetime")]
     private ?\DateTimeInterface $createdAt = null;
 
@@ -50,6 +55,14 @@ class Post
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => false])]
     private bool $active = false;
+
+    #[ORM\OneToMany(targetEntity: Gallery::class, mappedBy: 'post', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $gallery;
+
+    public function __construct()
+    {
+        $this->gallery = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -104,6 +117,42 @@ class Post
     {
         $this->description = $description;
 
+        return $this;
+    }
+
+    public function getImg(): ?string
+    {
+        return $this->img;
+    }
+
+    public function setImg(?string $img): self
+    {
+        $this->img = $img;
+
+        return $this;
+    }
+
+    public function getGallery(): Collection
+    {
+        return $this->gallery;
+    }
+
+    public function addGalleryImage(Gallery $gallery): self
+    {
+        if (!$this->gallery->contains($gallery)) {
+            $this->gallery[] = $gallery;
+            $gallery->setPost($this);
+        }
+        return $this;
+    }
+
+    public function removeGalleryImage(Gallery $gallery): self
+    {
+        if ($this->gallery->removeElement($gallery)) {
+            if ($gallery->getPost() === $this) {
+                $gallery->setPost(null);
+            }
+        }
         return $this;
     }
 

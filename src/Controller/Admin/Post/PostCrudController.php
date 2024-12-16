@@ -15,13 +15,16 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Bundle\SecurityBundle\Security;
 use \EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use \EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use Symfony\Component\Validator\Constraints\Image;
+
 
 class PostCrudController extends AbstractCrudController
 {
@@ -57,14 +60,26 @@ class PostCrudController extends AbstractCrudController
     {
         return [
             TextField::new('name'),
+            ImageField::new('img')
+                ->setBasePath('uploads/posts')
+                ->setUploadDir('public/uploads/posts')
+                ->setFileConstraints(new Image(
+                    maxSize: '2M',
+                    mimeTypes: ['image/jpeg', 'image/png'],
+                )),
             AssociationField::new('category', 'Category')
                 ->setRequired(true)
                 ->setFormTypeOption('choice_label', 'title'),
-            TextEditorField::new('description'),
+            TextEditorField::new('description')
+                ->hideOnIndex(),
             TextField::new('status')
-            ->hideOnDetail()
-            ->hideOnForm()
-            ->formatValue(fn($value) => strtoupper($value)),
+                ->hideOnDetail()
+                ->hideOnForm()
+                ->formatValue(fn($value) => strtoupper($value)),
+            DateTimeField::new('createdAt', 'Created At')
+                ->hideOnForm(),
+            DateTimeField::new('updatedAt', 'Updated At')
+                ->hideOnForm(),
         ];
     }
 
@@ -86,7 +101,8 @@ class PostCrudController extends AbstractCrudController
             throw new \Exception('Entity is not a Post');
         }
 
-        $this->isAdmin() ?? $post->setStatus(PostStatusEnum::PUBLISHED->value);
+        if($this->isAdmin()) $post->setStatus(PostStatusEnum::PUBLISHED->value);
+
         $post->setActive(true);
         $this->entityManager->flush();
 
@@ -101,7 +117,7 @@ class PostCrudController extends AbstractCrudController
 
     protected function isAdmin(): bool
     {
-        return $this->getUser()->getRoles()[0] == RoleEnum::ADMIN;
+        return in_array(RoleEnum::ADMIN->value, $this->getUser()->getRoles());
     }
 
     public function unpublishPost(AdminContext $context): \Symfony\Component\HttpFoundation\RedirectResponse

@@ -35,6 +35,9 @@
             "ref": "b131e6cbfe1b898a508987851963fff485986285"
         }
     },
+    "funcphp/easyadmin-gallery": {
+        "version": "dev-master"
+    },
     "symfony/asset-mapper": {
         "version": "7.1",
         "recipe": {
