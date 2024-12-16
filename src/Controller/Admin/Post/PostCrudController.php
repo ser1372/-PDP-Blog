@@ -6,12 +6,18 @@ use App\Entity\Post;
 use App\Enum\PostStatusEnum;
 use App\Enum\RoleEnum;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Bundle\SecurityBundle\Security;
 use \EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -26,6 +32,22 @@ class PostCrudController extends AbstractCrudController
         $this->security = $security;
         $this->entityManager = $entityManager;
     }
+
+
+    public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
+    {
+        $user = $this->security->getUser();
+        $queryBuilder = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
+
+        if (!$this->security->isGranted(RoleEnum::ADMIN->value)) {
+            $queryBuilder->andWhere('entity.user = :currentUser')
+                ->setParameter('currentUser', $user);
+        }
+
+        return $queryBuilder;
+    }
+
+
     public static function getEntityFqcn(): string
     {
         return Post::class;
@@ -64,7 +86,7 @@ class PostCrudController extends AbstractCrudController
             throw new \Exception('Entity is not a Post');
         }
 
-        $post->setStatus(PostStatusEnum::PUBLISHED->value);
+        $this->isAdmin() ?? $post->setStatus(PostStatusEnum::PUBLISHED->value);
         $post->setActive(true);
         $this->entityManager->flush();
 
@@ -74,6 +96,12 @@ class PostCrudController extends AbstractCrudController
             ->setController(PostCrudController::class)
             ->setAction(Action::INDEX)
             ->generateUrl());
+    }
+
+
+    protected function isAdmin(): bool
+    {
+        return $this->getUser()->getRoles()[0] == RoleEnum::ADMIN;
     }
 
     public function unpublishPost(AdminContext $context): \Symfony\Component\HttpFoundation\RedirectResponse

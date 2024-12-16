@@ -34,6 +34,13 @@
                     Already have an account? <a href="{{ path('app_login') }}" class="text-blue-500 hover:underline">Log in here</a>
                 </p>
             </div>
+
+            <div class="mb-4 text-center">
+                {{ form_row(registrationForm.isAuthor, {
+                    label_attr: { class: 'text-sm text-gray-500 dark:text-gray-400' },
+                    attr: { class: 'w-4 h-4 ml-2 text-blue-500 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' }
+                }) }}
+            </div>
         {{ form_end(registrationForm) }}
     </div>
 {% endblock %}
