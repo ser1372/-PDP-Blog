@@ -30,6 +30,7 @@ class UserCrudController extends AbstractCrudController
                     'USER'   => RoleEnum::USER->value,
                     'AUTHOR' => RoleEnum::AUTHOR->value,
                 ])
+                ->setSortable(false)
                 ->allowMultipleChoices(true)
                 ->renderExpanded(true)
         ];

@@ -56,7 +56,7 @@ class Post
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => false])]
     private bool $active = false;
 
-    #[ORM\OneToMany(targetEntity: Gallery::class, mappedBy: 'post', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Gallery::class, mappedBy: 'post', cascade: ['persist'], orphanRemoval: true)]
     private Collection $gallery;
 
     public function __construct()
@@ -137,16 +137,17 @@ class Post
         return $this->gallery;
     }
 
-    public function addGalleryImage(Gallery $gallery): self
+    public function addGallery(Gallery $gallery): self
     {
         if (!$this->gallery->contains($gallery)) {
             $this->gallery[] = $gallery;
             $gallery->setPost($this);
         }
+
         return $this;
     }
 
-    public function removeGalleryImage(Gallery $gallery): self
+    public function removeGallery(Gallery $gallery): self
     {
         if ($this->gallery->removeElement($gallery)) {
             if ($gallery->getPost() === $this) {
@@ -211,6 +212,20 @@ class Post
     public function setActive(bool $active): self
     {
         $this->active = $active;
+
+        return $this;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

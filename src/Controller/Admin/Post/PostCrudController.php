@@ -5,6 +5,7 @@ namespace App\Controller\Admin\Post;
 use App\Entity\Post;
 use App\Enum\PostStatusEnum;
 use App\Enum\RoleEnum;
+use App\Form\GalleryType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
@@ -15,6 +16,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
@@ -63,13 +65,23 @@ class PostCrudController extends AbstractCrudController
             ImageField::new('img')
                 ->setBasePath('uploads/posts')
                 ->setUploadDir('public/uploads/posts')
+                ->setRequired($pageName === Crud::PAGE_NEW)
+                ->setFormTypeOption('allow_delete', false)
                 ->setFileConstraints(new Image(
                     maxSize: '2M',
                     mimeTypes: ['image/jpeg', 'image/png'],
                 )),
-            AssociationField::new('category', 'Category')
+            AssociationField::new('category')
                 ->setRequired(true)
-                ->setFormTypeOption('choice_label', 'title'),
+                ->setFormTypeOption('choice_label', 'title')
+                ->renderAsHtml()
+                ->formatValue(function ($value, $entity) {
+                    return $value ? $value->getTitle() : '-';
+                }),
+            CollectionField::new('gallery')
+                ->setEntryType(GalleryType::class)
+                ->setFormTypeOption('by_reference', false)
+                ->onlyOnForms(),
             TextEditorField::new('description')
                 ->hideOnIndex(),
             TextField::new('status')
