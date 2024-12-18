@@ -16,14 +16,14 @@
 </head>
 <body class="bg-gray-900 antialiased">
 {% block header %}
-    {% include 'components/header/header.html.twig' %}
+    {{ component('header:Header') }}
 {% endblock %}
 
     {% block body %}
     {% endblock %}
 
 {% block footer %}
-    {% include 'components/footer/footer.html.twig' %}
+    {{ component('footer:Footer') }}
 {% endblock %}
 </body>
 </html>
