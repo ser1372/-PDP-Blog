@@ -25,4 +25,13 @@ class PostRepository extends ServiceEntityRepository
             ->useQueryCache(true)
             ->getResult();
     }
+
+    public function getPostBySlug(string $slug): ?Post
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.slug = :slug')
+            ->setParameter('slug', $slug)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

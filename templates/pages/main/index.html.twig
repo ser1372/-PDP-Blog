@@ -6,6 +6,17 @@
 {% block body %}
     <div class="max-w-7xl mx-auto pt-12 px-3 h-full">
         <twig:PopularPostSlider/>
+
+        <div class="my-10">
+            <h2 class="text-4xl text-center font-bold text-white">
+                Topical categories:
+            </h2>
+            <div class="mt-5">
+                <twig:CategorySlider/>
+            </div>
+        </div>
+
+        <twig:AboutBrabble/>
         <twig:MailingList/>
     </div>
 {% endblock %}

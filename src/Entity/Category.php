@@ -33,6 +33,9 @@ class Category
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $description = null;
 
+    #[ORM\Column(nullable: false)]
+    private ?string $img;
+
     #[ORM\Column(type: "datetime")]
     private ?\DateTimeInterface $createdAt = null;
 
@@ -41,6 +44,9 @@ class Category
 
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Post::class, cascade: ['persist', 'remove'])]
     private Collection $posts;
+
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => false])]
+    private bool $showInSlider = false;
 
     public function __construct()
     {
@@ -67,6 +73,18 @@ class Category
         return $this;
     }
 
+    public function isShowInSlider(): bool
+    {
+        return $this->showInSlider;
+    }
+
+    public function setShowInSlider(bool $showInSlider): self
+    {
+        $this->showInSlider = $showInSlider;
+
+        return $this;
+    }
+
     public function getSlug(): ?string
     {
         return $this->slug;
@@ -75,6 +93,18 @@ class Category
     public function setSlug(string $slug): static
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getImg(): ?string
+    {
+        return $this->img;
+    }
+
+    public function setImg(?string $img): self
+    {
+        $this->img = $img;
 
         return $this;
     }
