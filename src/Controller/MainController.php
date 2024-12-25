@@ -12,14 +12,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted("IS_AUTHENTICATED_FULLY")]
 class MainController extends AbstractController
 {
-    public function __construct(private PostRepository $postRepository)
-    {}
-
     #[Route('/', name: 'app_main')]
     public function index(): Response
     {
-        return $this->render('pages/main/index.html.twig', [
-            'lastPosts' => $this->postRepository->getLast(),
-        ]);
+        return $this->render('pages/main/index.html.twig');
     }
 }
