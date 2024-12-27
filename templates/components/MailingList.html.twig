@@ -1,0 +1,16 @@
+<div class="mt-5">
+    <aside class="p-4 my-8 border rounded-lg shadow-md sm:p-6 lg:p-8 bg-gray-800 border-gray-700" aria-label="Subscribe to the Brabble newsletter">
+        <h3 class="mb-3 text-xl font-medium  text-white">Get more updates...</h3>
+        <p class="mb-5 text-sm font-medium  text-gray-300">Want to be notified when a new post is added to Brabble? <br/> Sign up for our newsletter and you'll be among the first to know about new posts, topics, and your favorite authors.</p>
+        <form action="{{ form.vars.action }}" method="{{ form.vars.method }}" class="my-form-class">
+            {{ form_start(form) }}
+            <div class="flex items-center w-full max-w-md mb-3">
+                <div class="relative w-full mr-3">
+                    {{ form_row(form.email_address) }}
+                </div>
+                {{ form_row(form.submit) }}
+            </div>
+            {{ form_end(form) }}
+        </form>
+    </aside>
+</div>

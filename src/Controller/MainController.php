@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,8 +15,6 @@ class MainController extends AbstractController
     #[Route('/', name: 'app_main')]
     public function index(): Response
     {
-        return $this->render('pages/main/index.html.twig', [
-            'controller_name' => 'MainController',
-        ]);
+        return $this->render('pages/main/index.html.twig');
     }
 }

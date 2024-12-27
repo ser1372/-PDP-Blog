@@ -1,4 +1,7 @@
 .idea
+node_modules
+
+public/uploads
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
@@ -13,3 +16,20 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+###> symfony/webpack-encore-bundle ###
+/node_modules/
+/public/build/
+npm-debug.log
+yarn-error.log
+###< symfony/webpack-encore-bundle ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###

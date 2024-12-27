@@ -1,0 +1,32 @@
+{% extends '@EasyAdmin/layout.html.twig' %}
+
+{% block main %}
+    <div class="row justify-content-center items-center gap-1">
+        <div class="col-lg-3 col-6">
+            <div class="small-box rounded bg-secondary p-2">
+                <div class="inner">
+                    <h3 class="fa-2x">{{ posts }}</h3>
+                    <p class="fa-2x">All</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-6">
+            <div class="small-box rounded bg-secondary p-2">
+                <div class="inner">
+                    <h3 class="fa-2x">{{ moderationPosts }}</h3>
+                    <p class="fa-2x">Moderation</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-6">
+            <div class="small-box rounded bg-secondary p-2">
+                <div class="inner">
+                    <h3 class="fa-2x">{{ publishedPosts }}</h3>
+                    <p class="fa-2x">Published</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock main %}
