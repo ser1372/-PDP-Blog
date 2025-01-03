@@ -61,7 +61,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getFirstName(): ?string
     {
-        return $this->firstName;
+        return !empty($this->firstName)
+            ? $this->firstName
+            : 'User '.$this->getId();
     }
 
     public function setFirstName(?string $firstName): self
@@ -72,7 +74,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getLastName(): ?string
     {
-        return $this->lastName;
+        return !empty($this->lastName)
+            ? $this->lastName
+            : 'User '.$this->getId();
     }
 
     public function setLastName(?string $lastName): self

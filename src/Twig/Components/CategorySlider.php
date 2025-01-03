@@ -9,7 +9,7 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 #[AsTwigComponent]
 final class CategorySlider
 {
-
+    public string $title;
     public function __construct(private CategoryRepository $categoryRepository)
     {}
 

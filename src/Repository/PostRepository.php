@@ -19,6 +19,10 @@ class PostRepository extends ServiceEntityRepository
     public function getLast(int $limit = 6)
     {
         return $this->createQueryBuilder('p')
+            ->andWhere('p.active = :active')
+            ->andWhere('p.status != :status')
+            ->setParameter('active', true)
+            ->setParameter('status', 'moderation')
             ->orderBy('p.createdAt', 'DESC')
             ->setMaxResults($limit)
             ->getQuery()

@@ -24,6 +24,8 @@ class UserCrudController extends AbstractCrudController
     {
         return [
             TextField::new('email'),
+            TextField::new('first_name'),
+            TextField::new('last_name'),
             ChoiceField::new('roles', 'Roles')
                 ->setChoices([
                     'ADMIN'  => RoleEnum::ADMIN->value,

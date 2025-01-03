@@ -1,3 +1,11 @@
+{% if this.categories is not empty %}
+
+{% if title is not empty %}
+    <h2 class="text-4xl text-center font-bold text-white">
+        {{ title }}
+    </h2>
+{% endif %}
+
 <div id="category-carousel" class="relative w-full" data-carousel="slide">
     <!-- Carousel wrapper -->
     <div class="relative flex items-center overflow-hidden space-x-8">
@@ -30,3 +38,4 @@
         </span>
     </button>
 </div>
+{% endif %}

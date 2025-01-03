@@ -1,6 +1,7 @@
 <?php
 namespace App\Entity;
 
+use App\Enum\PostTypeEnum;
 use Cocur\Slugify\Slugify;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -58,6 +59,21 @@ class Post
 
     #[ORM\OneToMany(targetEntity: Gallery::class, mappedBy: 'post', cascade: ['persist'], orphanRemoval: true)]
     private Collection $gallery;
+
+    #[ORM\Column(type: Types::STRING, length: 50)]
+    private ?string $type = PostTypeEnum::POST->value;
+
+    public function getType(): PostTypeEnum
+    {
+        return PostTypeEnum::from($this->type);
+    }
+
+    public function setType(PostTypeEnum $type): self
+    {
+        $this->type = $type->value;
+
+        return $this;
+    }
 
     public function __construct()
     {
