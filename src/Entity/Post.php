@@ -21,7 +21,7 @@ class Post
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'posts')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?User $user = null;
 
     #[ORM\Column(type: Types::STRING, length: 80)]
@@ -32,7 +32,7 @@ class Post
     )]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255, unique: true)]
+    #[ORM\Column(type: Types::TEXT, unique: true)]
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -48,7 +48,7 @@ class Post
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'posts')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Category $category = null;
 
     #[ORM\Column(type: Types::STRING, length: 50, options: ['default' => 'moderation'])]
@@ -102,15 +102,20 @@ class Post
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(string $name, string $slug = ''): self
     {
+        if (mb_strlen($name) > 80) {
+            $name = mb_substr($name, 0, 77) . '...';
+        }
+
         $this->name = $name;
 
         $slugify = new Slugify();
-        $this->setSlug($slugify->slugify($name));
+        $this->setSlug($slugify->slugify(!empty($slug) ? $slug : $name));
 
         return $this;
     }
+
 
     public function getSlug(): ?string
     {

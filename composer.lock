@@ -3693,16 +3693,16 @@
         },
         {
             "name": "symfony/doctrine-messenger",
-            "version": "v7.1.6",
+            "version": "v7.1.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/doctrine-messenger.git",
-                "reference": "b2f548cdc9c85258493e022aefa53a44e5b9dfa3"
+                "reference": "5b36afa6445e5cbb2b1e668e3bf25b9264cf5cec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/doctrine-messenger/zipball/b2f548cdc9c85258493e022aefa53a44e5b9dfa3",
-                "reference": "b2f548cdc9c85258493e022aefa53a44e5b9dfa3",
+                "url": "https://api.github.com/repos/symfony/doctrine-messenger/zipball/5b36afa6445e5cbb2b1e668e3bf25b9264cf5cec",
+                "reference": "5b36afa6445e5cbb2b1e668e3bf25b9264cf5cec",
                 "shasum": ""
             },
             "require": {
@@ -3745,7 +3745,7 @@
             "description": "Symfony Doctrine Messenger Bridge",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/doctrine-messenger/tree/v7.1.6"
+                "source": "https://github.com/symfony/doctrine-messenger/tree/v7.1.10"
             },
             "funding": [
                 {
@@ -3761,7 +3761,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-10-18T09:46:03+00:00"
+            "time": "2024-12-16T13:22:43+00:00"
         },
         {
             "name": "symfony/dotenv",
