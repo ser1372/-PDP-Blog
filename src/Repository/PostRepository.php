@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Post;
+use App\Enum\PostStatusEnum;
+use App\Enum\PostTypeEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -21,8 +23,10 @@ class PostRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('p')
             ->andWhere('p.active = :active')
             ->andWhere('p.status != :status')
+            ->andWhere('p.type != :type')
             ->setParameter('active', true)
-            ->setParameter('status', 'moderation')
+            ->setParameter('status', PostStatusEnum::MODERATION->value)
+            ->setParameter('type',PostTypeEnum::NEWS->value)
             ->orderBy('p.createdAt', 'DESC')
             ->setMaxResults($limit)
             ->getQuery()
@@ -37,5 +41,21 @@ class PostRepository extends ServiceEntityRepository
             ->setParameter('slug', $slug)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function getNews(int $limit = 4): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.active = :active')
+            ->andWhere('p.status != :status')
+            ->andWhere('p.type = :type')
+            ->setParameter('active', true)
+            ->setParameter('status', PostStatusEnum::MODERATION->value)
+            ->setParameter('type', PostTypeEnum::NEWS->value)
+            ->orderBy('RANDOM()')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->useQueryCache(true)
+            ->getResult();
     }
 }

@@ -18,6 +18,7 @@
         "jcobhams/newsapi": "^1.0",
         "phpdocumentor/reflection-docblock": "^5.6",
         "phpstan/phpdoc-parser": "^2.0",
+        "qbbr/pgsql-doctrine-random-function": "^1.0",
         "runtime/frankenphp-symfony": "^0.2.0",
         "symfony/asset": "7.1.*",
         "symfony/asset-mapper": "7.1.*",
