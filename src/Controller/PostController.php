@@ -18,6 +18,6 @@ class PostController extends AbstractController
     {
         $post = $request->attributes->get('post');
         $user = $post->getUser();
-        return $this->render('pages/post/index.html.twig', compact('post','user'));
+        return $this->render('pages/post/view.html.twig', compact('post','user'));
     }
 }

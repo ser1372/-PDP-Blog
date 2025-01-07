@@ -110,8 +110,12 @@ class Post
 
         $this->name = $name;
 
-        $slugify = new Slugify();
-        $this->setSlug($slugify->slugify(!empty($slug) ? $slug : $name));
+        if(empty($slug)) {
+            $slugify = new Slugify();
+            $this->setSlug($slugify->slugify($name));
+        } else{
+            $this->setSlug($slug);
+        }
 
         return $this;
     }
@@ -233,20 +237,6 @@ class Post
     public function setActive(bool $active): self
     {
         $this->active = $active;
-
-        return $this;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
 
         return $this;
     }

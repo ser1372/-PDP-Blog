@@ -11,7 +11,6 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class PostSlugSubscriber implements EventSubscriberInterface
 {
 
-
     public function __construct(private PostRepository $postRepository)
     {}
 
