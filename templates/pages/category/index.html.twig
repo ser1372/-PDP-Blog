@@ -1,0 +1,45 @@
+{% extends 'layouts/guest.html.twig' %}
+
+{% block title %}Category{% endblock %}
+
+
+{% block body %}
+    <div class="max-w-7xl mx-auto pt-12 px-3 h-full">
+        <ul>
+            {% for post in posts %}
+                <li>
+                    <a href="{{ path('app_post', {slug: post.slug}) }}">
+                        {{ post.getName() }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <div class="pagination">
+            {% if totalPages > 1 %}
+                <nav>
+                    <ul>
+                        {% if currentPage > 1 %}
+                            <li>
+                                <a href="{{ path('category_show', { slug: category.slug, page: currentPage - 1 }) }}">Previous</a>
+                            </li>
+                        {% endif %}
+                        {% for i in 1..totalPages %}
+                            <li>
+                                <a href="{{ path('category_show', { slug: category.slug, page: i }) }}"
+                                   class="{{ i == currentPage ? 'active' : '' }}">
+                                    {{ i }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                        {% if currentPage < totalPages %}
+                            <li>
+                                <a href="{{ path('category_show', { slug: category.slug, page: currentPage + 1 }) }}">Next</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
